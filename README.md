@@ -2,8 +2,9 @@
 
 Umbrella site for Edge BizDev tools.
 
-- **Public:** landing page + partner **intake** placeholder + staff-access
-  placeholder (`public/`). The staff placeholder contains no internal content.
+- **Public preview:** landing page + partner **intake** placeholder + Fari's
+  draft vetting wizard (`public/`). The wizard is temporarily public for team
+  testing and must move behind Cloudflare Access before real partner use.
 - **Staff-only:** partner **vetting** and other internal tools (`internal/`),
   served behind a login.
 

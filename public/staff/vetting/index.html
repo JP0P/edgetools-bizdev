@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex" />
+<title>Edge BD Vetting Wizard</title>
+<style>
+  :root {
+    --bg: #f6f5f3;
+    --card: #ffffff;
+    --ink: #1c1b1a;
+    --ink-soft: #55524d;
+    --line: #e3e0da;
+    --accent: #2f5d50;
+    --accent-soft: #e7efec;
+    --warn: #8a5a1f;
+    --warn-soft: #fbeedd;
+    --danger: #8c2f2f;
+    --danger-soft: #fbe9e7;
+    --good: #2f5d50;
+    --good-soft: #e7efec;
+    --radius: 14px;
+    --shadow: 0 1px 2px rgba(0,0,0,0.04), 0 8px 24px rgba(20,20,20,0.06);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #16151a;
+      --card: #1f1e24;
+      --ink: #ece9e4;
+      --ink-soft: #a8a4a0;
+      --line: #34323a;
+      --accent: #7fb5a3;
+      --accent-soft: #223330;
+      --warn: #e0aa63;
+      --warn-soft: #35291a;
+      --danger: #e08a86;
+      --danger-soft: #3a2320;
+      --good: #7fb5a3;
+      --good-soft: #1e2e2a;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.35);
+    }
+  }
+  * { box-sizing: border-box; }
+ .preview-warning { background: var(--warn-soft); color: var(--warn); padding: 9px 16px; text-align: center; font-size: 12.5px; font-weight: 600; border-bottom: 1px solid var(--line); }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.5;
+  }
+  .wrap {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 40px 20px 80px;
+  }
+  header.top {
+    margin-bottom: 28px;
+  }
+  header.top h1 {
+    font-size: 22px;
+    margin: 0 0 4px;
+    letter-spacing: -0.01em;
+  }
+  header.top p {
+    margin: 0;
+    color: var(--ink-soft);
+    font-size: 14px;
+  }
+  .progress-track {
+    height: 6px;
+    background: var(--line);
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 20px 0 32px;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--accent);
+    width: 0%;
+    transition: width 0.3s ease;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 28px;
+  }
+  .step-label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-soft);
+    margin-bottom: 10px;
+  }
+  .question {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0 0 6px;
+  }
+  .hint {
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    margin: 0 0 20px;
+  }
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .opt {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    text-align: left;
+    border: 1px solid var(--line);
+    background: transparent;
+    color: var(--ink);
+    border-radius: 10px;
+    padding: 14px 16px;
+    font-size: 14.5px;
+    cursor: pointer;
+    transition: border-color 0.15s ease, background 0.15s ease;
+  }
+  .opt:hover {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+  }
+  .opt .tag {
+    flex: none;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    padding: 2px 7px;
+    border-radius: 5px;
+    margin-top: 1px;
+  }
+  .tag.clear { background: var(--good-soft); color: var(--good); }
+  .tag.check { background: var(--warn-soft); color: var(--warn); }
+  .tag.flag  { background: var(--danger-soft); color: var(--danger); }
+  .opt .label { flex: 1; }
+  .nav-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 24px;
+  }
+  .back-btn {
+    border: none;
+    background: none;
+    color: var(--ink-soft);
+    font-size: 13.5px;
+    cursor: pointer;
+    padding: 6px 0;
+  }
+  .back-btn:hover { color: var(--ink); }
+  .back-btn:disabled { visibility: hidden; }
+  .counter { font-size: 13px; color: var(--ink-soft); }
+
+  .result-badge {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border-radius: 999px;
+    margin-bottom: 14px;
+  }
+  .badge-advance { background: var(--good-soft); color: var(--good); }
+  .badge-info    { background: var(--warn-soft); color: var(--warn); }
+  .badge-decline { background: var(--danger-soft); color: var(--danger); }
+
+  .result h2 { font-size: 20px; margin: 0 0 8px; }
+  .result p.lead { color: var(--ink-soft); margin: 0 0 20px; font-size: 14.5px; }
+
+  .section-title {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-soft);
+    margin: 22px 0 8px;
+  }
+  .section-note {
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    margin: -4px 0 8px;
+  }
+  ul.flag-list {
+    margin: 0;
+    padding-left: 18px;
+    font-size: 14px;
+  }
+  ul.flag-list li { margin-bottom: 6px; }
+
+  .macro-box {
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px;
+    font-size: 13.5px;
+    white-space: pre-wrap;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    color: var(--ink);
+    margin-top: 8px;
+    position: relative;
+  }
+  .copy-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 12px;
+    border: 1px solid var(--line);
+    background: var(--card);
+    color: var(--ink-soft);
+    border-radius: 7px;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  .copy-btn:hover { color: var(--ink); border-color: var(--accent); }
+
+  .restart-btn {
+    margin-top: 28px;
+    border: 1px solid var(--line);
+    background: var(--card);
+    color: var(--ink);
+    border-radius: 10px;
+    padding: 10px 18px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .restart-btn:hover { border-color: var(--accent); }
+
+  input.lead-name {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--bg);
+    color: var(--ink);
+    font-size: 14px;
+    margin-top: 6px;
+  }
+</style>
+</head>
+<body>
+<div class="preview-warning" role="status">Preview only — temporarily public until staff login is active.</div>
+<div class="wrap">
+  <header class="top">
+    <h1>Edge BD Vetting Wizard</h1>
+    <p>Answer what you know about an inbound partnership pitch. It'll route you to a next step.</p>
+  </header>
+
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+
+  <div class="card" id="cardArea"></div>
+</div>
+
+<script>
+const LEAD_STEP = {
+  key: "leadName",
+  label: "Setup",
+  question: "Who's the pitch from?",
+  hint: "Just for your own record — used in the generated messages below.",
+  isText: true
+};
+
+// Each question:
+// - internalOnly: true  -> this is research/verification YOU do; never gets phrased as a request to the counterparty
+// - ask: string         -> only present when it's fair game to request from the counterparty directly; used to build the "info" draft message
+const QUESTIONS = [
+  {
+    key: "product",
+    label: "Product",
+    question: "Is there a live, working site with real product detail — not just marketing copy?",
+    hint: "Docs, how-it-works, supported chains/assets. Check whether launch-stage claims in the pitch match what's actually live.",
+    ask: "Could you walk us through the live product (not just the marketing site)? Want to make sure we're looking at what's actually shipped versus what's planned.",
+    options: [
+      { value: "yes", tag: "clear", tagText: "Clear", label: "Yes — live product with real documentation" },
+      { value: "prelaunch", tag: "check", tagText: "Check", label: "Pre-launch / partial — concept and docs exist but nothing live yet" },
+      { value: "no", tag: "flag", tagText: "Flag", label: "No — thin site, no real product detail" }
+    ]
+  },
+  {
+    key: "team",
+    label: "Team",
+    question: "Can you independently verify real humans behind this on LinkedIn?",
+    hint: "Named on the site AND findable/checkable on LinkedIn — not just a name with no trace, and not a name so common you can't tell which profile is theirs.",
+    ask: "Could you share LinkedIn profiles for your core team? We like to know who we'd actually be working with before this goes further.",
+    options: [
+      { value: "yes", tag: "clear", tagText: "Clear", label: "Yes — named team, LinkedIn profiles check out" },
+      { value: "partial", tag: "check", tagText: "Check", label: "Some names given, but not independently confirmed yet" },
+      { value: "no", tag: "flag", tagText: "Flag", label: "No team names disclosed at all" }
+    ]
+  },
+  {
+    key: "jurisdiction",
+    label: "Legal entity",
+    question: "Is their registered legal entity and jurisdiction clear and consistent?",
+    hint: "Check the site footer / ToS against an actual company registry. Watch for a dissolved entity, a name collision, or a mismatch between what different pages claim.",
+    ask: "Could you confirm your current registered legal entity, registration number, and jurisdiction? We want to make sure we have accurate details on file — we noticed a couple of different entity names across your site and legal docs.",
+    options: [
+      { value: "yes", tag: "clear", tagText: "Clear", label: "Yes — entity and jurisdiction check out and match" },
+      { value: "unclear", tag: "check", tagText: "Check", label: "Unclear, mismatched, or unverifiable — needs a direct question to them" },
+      { value: "no", tag: "flag", tagText: "Flag", label: "No entity disclosed, or the one found is dissolved / doesn't match" }
+    ]
+  },
+  {
+    key: "scamcheck",
+    label: "Track record",
+    question: "Did you find any scam reports, regulatory/legal action, or hack history tied to the project or named team members?",
+    hint: "Search project name + \"scam\"/\"rug pull\"/\"hack\", and check named individuals against DOJ/SEC/CFTC press releases and prior projects. This is your own research — never put specifics of what you found in a message to them.",
+    internalOnly: true,
+    options: [
+      { value: "none", tag: "clear", tagText: "Clear", label: "None found" },
+      { value: "ambiguous", tag: "check", tagText: "Check", label: "Found something ambiguous (e.g. a same-name match, unclear if it's really them) — needs follow-up on your end" },
+      { value: "confirmed", tag: "flag", tagText: "Flag", label: "Found confirmed issues tied to this project or these specific people" }
+    ]
+  },
+  {
+    key: "security",
+    label: "Security",
+    question: "If this integration would touch smart contracts, an API, or anything custody-adjacent — is there a published third-party security audit?",
+    hint: "Verify any audit badge directly on the auditor's own site (CertiK, OpenZeppelin, Halborn, Quantstamp, etc.), not just the claim on their site.",
+    ask: "Do you have a published third-party security audit, or a timeline for one? For anything touching smart contracts or custody-adjacent flows, that's something we'd need before going further.",
+    options: [
+      { value: "yes", tag: "clear", tagText: "Clear", label: "Yes, published and verifiable" },
+      { value: "notyet", tag: "check", tagText: "Check", label: "Not yet — reasonable for pre-launch, but needs to be a condition before going live" },
+      { value: "required", tag: "flag", tagText: "Flag", label: "No audit, and the integration as proposed needs one now" }
+    ]
+  },
+  {
+    key: "alignment",
+    label: "Values",
+    question: "Does the product/values align with Edge (self-custodial, privacy-respecting, no forced KYC)?",
+    hint: "Look for contradictions — e.g. a \"privacy-focused\" pitch that routes through providers with mid-transaction KYC demands. This is your own judgment call, not something to put to them as-is.",
+    internalOnly: true,
+    options: [
+      { value: "yes", tag: "clear", tagText: "Clear", label: "Yes, clearly aligned" },
+      { value: "mixed", tag: "check", tagText: "Check", label: "Mixed signals — some alignment, some contradictions worth asking a specific question about" },
+      { value: "no", tag: "flag", tagText: "Flag", label: "No — meaningfully conflicts with Edge's values" }
+    ]
+  },
+  {
+    key: "businesscase",
+    label: "Business case",
+    question: "Did they make a credible case for how this makes Edge money or grows Edge's user base — with real terms, not just \"trust us\"?",
+    hint: "Look for a concrete revenue share, referral/fee structure, or distribution mechanic. \"We'll feature you\" with no numbers isn't a business case yet.",
+    ask: "Could you put together concrete terms — revenue share, fee structure, or however the distribution mechanic works — so we can evaluate this as a real proposal rather than a concept?",
+    options: [
+      { value: "yes", tag: "clear", tagText: "Clear", label: "Yes — concrete terms proposed" },
+      { value: "vague", tag: "check", tagText: "Check", label: "Vague or aspirational only — worth pinning down before deciding" },
+      { value: "no", tag: "flag", tagText: "Flag", label: "No real business case made" }
+    ]
+  },
+  {
+    key: "partneroverlap",
+    label: "Partner overlap",
+    question: "Do they already work with any of Edge's existing partners or integrations?",
+    hint: "Real overlap with a partner Edge already trusts is a good corroboration signal — but verify it with that partner directly rather than taking their word for it.",
+    ask: "Which of our existing partners or integrations do you already work with, if any? Happy to verify directly with them as part of our process.",
+    options: [
+      { value: "verified", tag: "clear", tagText: "Clear", label: "Yes — confirmed directly with the overlapping partner" },
+      { value: "unverified", tag: "check", tagText: "Check", label: "They claim overlap (or there's none to claim) — not yet verified either way" },
+      { value: "false", tag: "flag", tagText: "Flag", label: "They claimed overlap and it turned out false or misrepresented when I checked" }
+    ]
+  },
+  {
+    key: "outreach",
+    label: "Outreach",
+    question: "Did they reach out through a channel you can map back to their own official site/socials?",
+    hint: "Don't take a Telegram handle or email in the pitch at face value — cross-check it against the contacts the project publishes itself. This is your own verification step, not something to ask them.",
+    internalOnly: true,
+    options: [
+      { value: "yes", tag: "clear", tagText: "Clear", label: "Yes, confirmed it matches their official channels" },
+      { value: "unchecked", tag: "check", tagText: "Check", label: "Haven't cross-checked yet" },
+      { value: "no", tag: "flag", tagText: "Flag", label: "Doesn't match, or no official channel to check against" }
+    ]
+  }
+];
+
+let leadName = "";
+let answers = {};
+let step = 0; // 0 = lead name step, 1..N = questions, N+1 = result
+const totalSteps = QUESTIONS.length + 1;
+
+function render() {
+  const pct = Math.min(100, Math.round((step / totalSteps) * 100));
+  document.getElementById('progressFill').style.width = pct + '%';
+
+  const cardArea = document.getElementById('cardArea');
+
+  if (step === 0) {
+    cardArea.innerHTML = `
+      <div class="step-label">Step 1 of ${totalSteps}</div>
+      <p class="question">${LEAD_STEP.question}</p>
+      <p class="hint">${LEAD_STEP.hint}</p>
+      <input type="text" class="lead-name" id="leadInput" placeholder="e.g. YiFi (@yifi_bizdev)" value="${escapeHtml(leadName)}">
+      <div class="nav-row">
+        <button class="back-btn" disabled>Back</button>
+        <button class="opt" style="padding:10px 18px; display:inline-block;" onclick="submitLead()">Start vetting →</button>
+      </div>
+    `;
+    setTimeout(() => { const el = document.getElementById('leadInput'); if (el) el.focus(); }, 0);
+    return;
+  }
+
+  if (step >= 1 && step <= QUESTIONS.length) {
+    const q = QUESTIONS[step - 1];
+    cardArea.innerHTML = `
+      <div class="step-label">Step ${step + 1} of ${totalSteps} · ${q.label}${q.internalOnly ? ' · internal check' : ''}</div>
+      <p class="question">${q.question}</p>
+      <p class="hint">${q.hint}</p>
+      <div class="options">
+        ${q.options.map(o => `
+          <button class="opt" onclick="answer('${q.key}', '${o.value}')">
+            <span class="tag ${o.tag}">${o.tagText}</span>
+            <span class="label">${o.label}</span>
+          </button>
+        `).join('')}
+      </div>
+      <div class="nav-row">
+        <button class="back-btn" onclick="goBack()">← Back</button>
+        <span class="counter">${step} of ${QUESTIONS.length} answered</span>
+      </div>
+    `;
+    return;
+  }
+
+  // result step
+  renderResult(cardArea);
+}
+
+function escapeHtml(s) {
+  return (s || "").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function submitLead() {
+  leadName = document.getElementById('leadInput').value.trim();
+  step = 1;
+  render();
+}
+
+function answer(key, value) {
+  answers[key] = value;
+  if (step < QUESTIONS.length) {
+    step += 1;
+  } else {
+    step = QUESTIONS.length + 1;
+  }
+  render();
+}
+
+function goBack() {
+  if (step > 0) step -= 1;
+  render();
+}
+
+function computeOutcome() {
+  const flags = [];
+  const checks = [];
+
+  QUESTIONS.forEach(q => {
+    const v = answers[q.key];
+    const opt = q.options.find(o => o.value === v);
+    if (!opt) return;
+    if (opt.tag === 'flag') flags.push({ q, opt });
+    if (opt.tag === 'check') checks.push({ q, opt });
+  });
+
+  // Hard-decline triggers
+  const confirmedTrackRecord = answers.scamcheck === 'confirmed';
+  const valuesConflict = answers.alignment === 'no';
+  const noRealProduct = answers.product === 'no';
+
+  if (confirmedTrackRecord || valuesConflict || noRealProduct) {
+    return { verdict: 'decline', flags, checks };
+  }
+
+  if (checks.length > 0 || flags.length > 0) {
+    return { verdict: 'info', flags, checks };
+  }
+
+  return { verdict: 'advance', flags, checks };
+}
+
+function renderResult(cardArea) {
+  const { verdict, flags, checks } = computeOutcome();
+  const name = leadName || "this lead";
+
+  let badgeClass, badgeText, heading, lead;
+
+  if (verdict === 'decline') {
+    badgeClass = 'badge-decline'; badgeText = 'Recommendation: Decline';
+    heading = `${name} doesn't clear the bar right now`;
+    lead = "At least one hard-stop came up — a confirmed track-record issue, a values conflict, or no real product behind the pitch. Send a clear, polite decline rather than leaving it open. The reasons below are for your records only — keep specifics out of what you actually send them.";
+  } else if (verdict === 'info') {
+    badgeClass = 'badge-info'; badgeText = 'Recommendation: Get more info first';
+    heading = `${name} isn't a clear yes or no yet`;
+    lead = "Nothing here is disqualifying, but there are open items to close out before this moves further. Some are fair to ask them directly; others are checks that are on you to run — the draft message below only includes the ones that belong in their inbox.";
+  } else {
+    badgeClass = 'badge-advance'; badgeText = 'Recommendation: Advance';
+    heading = `${name} clears the first-pass vetting`;
+    lead = "No hard flags and no open checks. Move it forward in the Asana pipeline and schedule an intro call.";
+  }
+
+  const allItems = [...flags, ...checks];
+  const externalItems = allItems.filter(i => !i.q.internalOnly);
+  const internalItems = allItems.filter(i => i.q.internalOnly);
+
+  let itemsHtml = '';
+  if (externalItems.length) {
+    itemsHtml += `<div class="section-title">To ask them</div><ul class="flag-list">`;
+    externalItems.forEach(i => { itemsHtml += `<li><strong>${i.q.label}:</strong> ${i.opt.label}</li>`; });
+    itemsHtml += `</ul>`;
+  }
+  if (internalItems.length) {
+    itemsHtml += `<div class="section-title">For you to verify — not for the message</div>`;
+    itemsHtml += `<p class="section-note">These are your own research/judgment calls. Don't put specifics from these into anything you send the counterparty.</p>`;
+    itemsHtml += `<ul class="flag-list">`;
+    internalItems.forEach(i => { itemsHtml += `<li><strong>${i.q.label}:</strong> ${i.opt.label}</li>`; });
+    itemsHtml += `</ul>`;
+  }
+
+  const macro = buildMacro(verdict, name, flags, checks, answers);
+  const macroLabel = verdict === 'advance' ? 'Internal note (not sent externally)' : 'Draft message — safe to send as written';
+
+  cardArea.innerHTML = `
+    <div class="result">
+      <span class="result-badge ${badgeClass}">${badgeText}</span>
+      <h2>${heading}</h2>
+      <p class="lead">${lead}</p>
+      ${itemsHtml}
+      <div class="section-title">${macroLabel}</div>
+      <div class="macro-box" id="macroBox">${escapeHtml(macro)}<button class="copy-btn" onclick="copyMacro()">Copy</button></div>
+    </div>
+    <button class="restart-btn" onclick="restart()">↺ Start over with a new lead</button>
+  `;
+}
+
+function buildMacro(verdict, name, flags, checks, answersObj) {
+  if (verdict === 'decline') {
+    const onlyPrelaunch = answersObj.scamcheck !== 'confirmed'
+      && answersObj.alignment !== 'no'
+      && answersObj.product === 'no';
+
+    if (onlyPrelaunch) {
+      return `Hi — thanks for reaching out and walking us through ${name}.
+
+This looks like it's still fairly early-stage for what we'd need on our end right now. We'd love to reconnect once there's a live product we can evaluate — feel free to circle back then.`;
+    }
+
+    return `Hi — thanks for reaching out and walking us through ${name}.
+
+After reviewing the details on our side, we don't think this is the right fit for Edge at this time. We're always open to revisiting down the line if things change — appreciate you thinking of us.`;
+  }
+
+  if (verdict === 'info') {
+    const externalAsks = [...flags, ...checks]
+      .filter(f => !f.q.internalOnly && f.q.ask)
+      .map(f => `- ${f.q.ask}`);
+
+    let msg = `Hi — thanks for the details on ${name}, this is interesting.\n\nBefore we go further, a few things we'd need from your side:\n`;
+    if (externalAsks.length) {
+      msg += `\n${externalAsks.join('\n')}\n`;
+    } else {
+      msg += `\n(Everything outstanding here is ours to verify internally — nothing further needed from you yet.)\n`;
+    }
+    msg += `\nOnce we have those, we can move quickly on scheduling a call with the right person on our side.`;
+    return msg;
+  }
+
+  return `Internal note — ${name} cleared first-pass vetting (no flags, no open checks).
+
+Next steps:
+1. Add to Asana BD pipeline, stage: "Intro call"
+2. Pull in the right internal stakeholder(s) — likely swaps/product + legal if private-swap or custody-adjacent features are involved
+3. Confirm proposed revenue share / distribution terms in writing before the call
+4. Schedule intro call and bring this vetting summary`;
+}
+
+function copyMacro() {
+  const box = document.getElementById('macroBox');
+  const text = box.textContent.replace(/Copy$/, '').trim();
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = box.querySelector('.copy-btn');
+    const orig = btn.textContent;
+    btn.textContent = 'Copied!';
+    setTimeout(() => { btn.textContent = orig; }, 1400);
+  });
+}
+
+function restart() {
+  leadName = "";
+  answers = {};
+  step = 0;
+  render();
+}
+
+render();
+</script>
+</body>
+</html>
+

@@ -47,6 +47,7 @@ public/            world-readable static site
   index.html       landing
   styles.css       shared styling
   intake/          partner intake form
+  staff/           public "access coming soon" page; no internal content
 internal/          auth-gated surface — never public
 .do/               App Platform specs
 docs/              this file

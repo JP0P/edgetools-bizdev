@@ -2,7 +2,8 @@
 
 Umbrella site for Edge BizDev tools.
 
-- **Public:** landing page + partner **intake** form (`public/`).
+- **Public:** landing page + partner **intake** placeholder + staff-access
+  placeholder (`public/`). The staff placeholder contains no internal content.
 - **Staff-only:** partner **vetting** and other internal tools (`internal/`),
   served behind a login.
 
@@ -22,6 +23,7 @@ Public pages are open; `/staff/` redirects to `/login` until you sign in.
 ## Deploy modes
 
 - **Static site** — `.do/app.static.yaml`. Serves `public/` only: landing and
-  intake, no running process and no login.
+  placeholders, no running process and no real login. Internal vetting content
+  must remain outside `public/` until Cloudflare Access is active.
 - **Node service** — `.do/app.service.yaml`. Serves both surfaces and enables
   the gated `/staff` area.

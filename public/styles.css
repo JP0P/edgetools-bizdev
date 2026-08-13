@@ -32,7 +32,7 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--ink);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-family: Quicksand, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
 }
@@ -56,6 +56,7 @@ body {
 .brand { font-size: 18px; }
 .brand, .brand a { display: flex; align-items: center; gap: 10px; color: var(--ink); text-decoration: none; }
 .mark { color: var(--accent); font-size: 20px; }
+.logo-mark { width: 68px; height: auto; color: var(--ink); }
 .staff-link {
   display: inline-flex;
   align-items: center;

@@ -246,7 +246,7 @@
 </style>
 </head>
 <body>
-<div class="preview-warning" role="status">Preview only — temporarily public until staff login is active.</div>
+<div class="preview-warning" role="status">Preview only. Temporarily public until staff login is active.</div>
 <div class="wrap">
   <header class="top">
     <h1>Edge BD Vetting Wizard</h1>
@@ -263,7 +263,7 @@ const LEAD_STEP = {
   key: "leadName",
   label: "Setup",
   question: "Who's the pitch from?",
-  hint: "Just for your own record — used in the generated messages below.",
+  hint: "Just for your own record, used in the generated messages below.",
   isText: true
 };
 
@@ -274,23 +274,23 @@ const QUESTIONS = [
   {
     key: "product",
     label: "Product",
-    question: "Is there a live, working site with real product detail — not just marketing copy?",
+    question: "Is there a live, working site with real product detail, not just marketing copy?",
     hint: "Docs, how-it-works, supported chains/assets. Check whether launch-stage claims in the pitch match what's actually live.",
     ask: "Could you walk us through the live product (not just the marketing site)? Want to make sure we're looking at what's actually shipped versus what's planned.",
     options: [
-      { value: "yes", tag: "clear", tagText: "Clear", label: "Yes — live product with real documentation" },
-      { value: "prelaunch", tag: "check", tagText: "Check", label: "Pre-launch / partial — concept and docs exist but nothing live yet" },
-      { value: "no", tag: "flag", tagText: "Flag", label: "No — thin site, no real product detail" }
+      { value: "yes", tag: "clear", tagText: "Clear", label: "Yes: live product with real documentation" },
+      { value: "prelaunch", tag: "check", tagText: "Check", label: "Pre-launch / partial: concept and docs exist but nothing live yet" },
+      { value: "no", tag: "flag", tagText: "Flag", label: "No: thin site, no real product detail" }
     ]
   },
   {
     key: "team",
     label: "Team",
     question: "Can you independently verify real humans behind this on LinkedIn?",
-    hint: "Named on the site AND findable/checkable on LinkedIn — not just a name with no trace, and not a name so common you can't tell which profile is theirs.",
+    hint: "Named on the site AND findable/checkable on LinkedIn, not just a name with no trace, and not a name so common you can't tell which profile is theirs.",
     ask: "Could you share LinkedIn profiles for your core team? We like to know who we'd actually be working with before this goes further.",
     options: [
-      { value: "yes", tag: "clear", tagText: "Clear", label: "Yes — named team, LinkedIn profiles check out" },
+      { value: "yes", tag: "clear", tagText: "Clear", label: "Yes: named team, LinkedIn profiles check out" },
       { value: "partial", tag: "check", tagText: "Check", label: "Some names given, but not independently confirmed yet" },
       { value: "no", tag: "flag", tagText: "Flag", label: "No team names disclosed at all" }
     ]
@@ -300,10 +300,10 @@ const QUESTIONS = [
     label: "Legal entity",
     question: "Is their registered legal entity and jurisdiction clear and consistent?",
     hint: "Check the site footer / ToS against an actual company registry. Watch for a dissolved entity, a name collision, or a mismatch between what different pages claim.",
-    ask: "Could you confirm your current registered legal entity, registration number, and jurisdiction? We want to make sure we have accurate details on file — we noticed a couple of different entity names across your site and legal docs.",
+    ask: "Could you confirm your current registered legal entity, registration number, and jurisdiction? We want to make sure we have accurate details on file. We noticed a couple of different entity names across your site and legal docs.",
     options: [
-      { value: "yes", tag: "clear", tagText: "Clear", label: "Yes — entity and jurisdiction check out and match" },
-      { value: "unclear", tag: "check", tagText: "Check", label: "Unclear, mismatched, or unverifiable — needs a direct question to them" },
+      { value: "yes", tag: "clear", tagText: "Clear", label: "Yes: entity and jurisdiction check out and match" },
+      { value: "unclear", tag: "check", tagText: "Check", label: "Unclear, mismatched, or unverifiable: needs a direct question to them" },
       { value: "no", tag: "flag", tagText: "Flag", label: "No entity disclosed, or the one found is dissolved / doesn't match" }
     ]
   },
@@ -311,23 +311,23 @@ const QUESTIONS = [
     key: "scamcheck",
     label: "Track record",
     question: "Did you find any scam reports, regulatory/legal action, or hack history tied to the project or named team members?",
-    hint: "Search project name + \"scam\"/\"rug pull\"/\"hack\", and check named individuals against DOJ/SEC/CFTC press releases and prior projects. This is your own research — never put specifics of what you found in a message to them.",
+    hint: "Search project name + \"scam\"/\"rug pull\"/\"hack\", and check named individuals against DOJ/SEC/CFTC press releases and prior projects. This is your own research. Never put specifics of what you found in a message to them.",
     internalOnly: true,
     options: [
       { value: "none", tag: "clear", tagText: "Clear", label: "None found" },
-      { value: "ambiguous", tag: "check", tagText: "Check", label: "Found something ambiguous (e.g. a same-name match, unclear if it's really them) — needs follow-up on your end" },
+      { value: "ambiguous", tag: "check", tagText: "Check", label: "Found something ambiguous (e.g. a same-name match, unclear if it's really them): needs follow-up on your end" },
       { value: "confirmed", tag: "flag", tagText: "Flag", label: "Found confirmed issues tied to this project or these specific people" }
     ]
   },
   {
     key: "security",
     label: "Security",
-    question: "If this integration would touch smart contracts, an API, or anything custody-adjacent — is there a published third-party security audit?",
+    question: "If this integration would touch smart contracts, an API, or anything custody-adjacent: is there a published third-party security audit?",
     hint: "Verify any audit badge directly on the auditor's own site (CertiK, OpenZeppelin, Halborn, Quantstamp, etc.), not just the claim on their site.",
     ask: "Do you have a published third-party security audit, or a timeline for one? For anything touching smart contracts or custody-adjacent flows, that's something we'd need before going further.",
     options: [
       { value: "yes", tag: "clear", tagText: "Clear", label: "Yes, published and verifiable" },
-      { value: "notyet", tag: "check", tagText: "Check", label: "Not yet — reasonable for pre-launch, but needs to be a condition before going live" },
+      { value: "notyet", tag: "check", tagText: "Check", label: "Not yet: reasonable for pre-launch, but needs to be a condition before going live" },
       { value: "required", tag: "flag", tagText: "Flag", label: "No audit, and the integration as proposed needs one now" }
     ]
   },
@@ -335,23 +335,23 @@ const QUESTIONS = [
     key: "alignment",
     label: "Values",
     question: "Does the product/values align with Edge (self-custodial, privacy-respecting, no forced KYC)?",
-    hint: "Look for contradictions — e.g. a \"privacy-focused\" pitch that routes through providers with mid-transaction KYC demands. This is your own judgment call, not something to put to them as-is.",
+    hint: "Look for contradictions: e.g. a \"privacy-focused\" pitch that routes through providers with mid-transaction KYC demands. This is your own judgment call, not something to put to them as-is.",
     internalOnly: true,
     options: [
       { value: "yes", tag: "clear", tagText: "Clear", label: "Yes, clearly aligned" },
-      { value: "mixed", tag: "check", tagText: "Check", label: "Mixed signals — some alignment, some contradictions worth asking a specific question about" },
-      { value: "no", tag: "flag", tagText: "Flag", label: "No — meaningfully conflicts with Edge's values" }
+      { value: "mixed", tag: "check", tagText: "Check", label: "Mixed signals: some alignment, some contradictions worth asking a specific question about" },
+      { value: "no", tag: "flag", tagText: "Flag", label: "No: meaningfully conflicts with Edge's values" }
     ]
   },
   {
     key: "businesscase",
     label: "Business case",
-    question: "Did they make a credible case for how this makes Edge money or grows Edge's user base — with real terms, not just \"trust us\"?",
+    question: "Did they make a credible case for how this makes Edge money or grows Edge's user base, with real terms, not just \"trust us\"?",
     hint: "Look for a concrete revenue share, referral/fee structure, or distribution mechanic. \"We'll feature you\" with no numbers isn't a business case yet.",
-    ask: "Could you put together concrete terms — revenue share, fee structure, or however the distribution mechanic works — so we can evaluate this as a real proposal rather than a concept?",
+    ask: "Could you put together concrete terms (revenue share, fee structure, or however the distribution mechanic works) so we can evaluate this as a real proposal rather than a concept?",
     options: [
-      { value: "yes", tag: "clear", tagText: "Clear", label: "Yes — concrete terms proposed" },
-      { value: "vague", tag: "check", tagText: "Check", label: "Vague or aspirational only — worth pinning down before deciding" },
+      { value: "yes", tag: "clear", tagText: "Clear", label: "Yes: concrete terms proposed" },
+      { value: "vague", tag: "check", tagText: "Check", label: "Vague or aspirational only: worth pinning down before deciding" },
       { value: "no", tag: "flag", tagText: "Flag", label: "No real business case made" }
     ]
   },
@@ -359,11 +359,11 @@ const QUESTIONS = [
     key: "partneroverlap",
     label: "Partner overlap",
     question: "Do they already work with any of Edge's existing partners or integrations?",
-    hint: "Real overlap with a partner Edge already trusts is a good corroboration signal — but verify it with that partner directly rather than taking their word for it.",
+    hint: "Real overlap with a partner Edge already trusts is a good corroboration signal. Verify it with that partner directly rather than taking their word for it.",
     ask: "Which of our existing partners or integrations do you already work with, if any? Happy to verify directly with them as part of our process.",
     options: [
-      { value: "verified", tag: "clear", tagText: "Clear", label: "Yes — confirmed directly with the overlapping partner" },
-      { value: "unverified", tag: "check", tagText: "Check", label: "They claim overlap (or there's none to claim) — not yet verified either way" },
+      { value: "verified", tag: "clear", tagText: "Clear", label: "Yes: confirmed directly with the overlapping partner" },
+      { value: "unverified", tag: "check", tagText: "Check", label: "They claim overlap (or there's none to claim): not yet verified either way" },
       { value: "false", tag: "flag", tagText: "Flag", label: "They claimed overlap and it turned out false or misrepresented when I checked" }
     ]
   },
@@ -371,7 +371,7 @@ const QUESTIONS = [
     key: "outreach",
     label: "Outreach",
     question: "Did they reach out through a channel you can map back to their own official site/socials?",
-    hint: "Don't take a Telegram handle or email in the pitch at face value — cross-check it against the contacts the project publishes itself. This is your own verification step, not something to ask them.",
+    hint: "Don't take a Telegram handle or email in the pitch at face value. Cross-check it against the contacts the project publishes itself. This is your own verification step, not something to ask them.",
     internalOnly: true,
     options: [
       { value: "yes", tag: "clear", tagText: "Clear", label: "Yes, confirmed it matches their official channels" },
@@ -495,11 +495,11 @@ function renderResult(cardArea) {
   if (verdict === 'decline') {
     badgeClass = 'badge-decline'; badgeText = 'Recommendation: Decline';
     heading = `${name} doesn't clear the bar right now`;
-    lead = "At least one hard-stop came up — a confirmed track-record issue, a values conflict, or no real product behind the pitch. Send a clear, polite decline rather than leaving it open. The reasons below are for your records only — keep specifics out of what you actually send them.";
+    lead = "At least one hard stop came up: a confirmed track-record issue, a values conflict, or no real product behind the pitch. Send a clear, polite decline rather than leaving it open. The reasons below are for your records only. Keep specifics out of what you actually send them.";
   } else if (verdict === 'info') {
     badgeClass = 'badge-info'; badgeText = 'Recommendation: Get more info first';
     heading = `${name} isn't a clear yes or no yet`;
-    lead = "Nothing here is disqualifying, but there are open items to close out before this moves further. Some are fair to ask them directly; others are checks that are on you to run — the draft message below only includes the ones that belong in their inbox.";
+    lead = "Nothing here is disqualifying, but there are open items to close out before this moves further. Some are fair to ask them directly; others are checks that are on you to run. The draft message below only includes the ones that belong in their inbox.";
   } else {
     badgeClass = 'badge-advance'; badgeText = 'Recommendation: Advance';
     heading = `${name} clears the first-pass vetting`;
@@ -517,7 +517,7 @@ function renderResult(cardArea) {
     itemsHtml += `</ul>`;
   }
   if (internalItems.length) {
-    itemsHtml += `<div class="section-title">For you to verify — not for the message</div>`;
+    itemsHtml += `<div class="section-title">For you to verify: not for the message</div>`;
     itemsHtml += `<p class="section-note">These are your own research/judgment calls. Don't put specifics from these into anything you send the counterparty.</p>`;
     itemsHtml += `<ul class="flag-list">`;
     internalItems.forEach(i => { itemsHtml += `<li><strong>${i.q.label}:</strong> ${i.opt.label}</li>`; });
@@ -525,7 +525,7 @@ function renderResult(cardArea) {
   }
 
   const macro = buildMacro(verdict, name, flags, checks, answers);
-  const macroLabel = verdict === 'advance' ? 'Internal note (not sent externally)' : 'Draft message — safe to send as written';
+  const macroLabel = verdict === 'advance' ? 'Internal note (not sent externally)' : 'Draft message: safe to send as written';
 
   cardArea.innerHTML = `
     <div class="result">
@@ -547,14 +547,14 @@ function buildMacro(verdict, name, flags, checks, answersObj) {
       && answersObj.product === 'no';
 
     if (onlyPrelaunch) {
-      return `Hi — thanks for reaching out and walking us through ${name}.
+      return `Hi, thanks for reaching out and walking us through ${name}.
 
-This looks like it's still fairly early-stage for what we'd need on our end right now. We'd love to reconnect once there's a live product we can evaluate — feel free to circle back then.`;
+This looks like it's still fairly early-stage for what we'd need on our end right now. We'd love to reconnect once there's a live product we can evaluate. Feel free to circle back then.`;
     }
 
-    return `Hi — thanks for reaching out and walking us through ${name}.
+    return `Hi, thanks for reaching out and walking us through ${name}.
 
-After reviewing the details on our side, we don't think this is the right fit for Edge at this time. We're always open to revisiting down the line if things change — appreciate you thinking of us.`;
+After reviewing the details on our side, we don't think this is the right fit for Edge at this time. We're always open to revisiting down the line if things change. We appreciate you thinking of us.`;
   }
 
   if (verdict === 'info') {
@@ -562,21 +562,21 @@ After reviewing the details on our side, we don't think this is the right fit fo
       .filter(f => !f.q.internalOnly && f.q.ask)
       .map(f => `- ${f.q.ask}`);
 
-    let msg = `Hi — thanks for the details on ${name}, this is interesting.\n\nBefore we go further, a few things we'd need from your side:\n`;
+    let msg = `Thanks for providing details on ${name}! Before we proceed, we still need the following items:\n`;
     if (externalAsks.length) {
       msg += `\n${externalAsks.join('\n')}\n`;
     } else {
-      msg += `\n(Everything outstanding here is ours to verify internally — nothing further needed from you yet.)\n`;
+      msg += `\n(Everything outstanding here is ours to verify internally. Nothing further needed from you yet.)\n`;
     }
-    msg += `\nOnce we have those, we can move quickly on scheduling a call with the right person on our side.`;
+    msg += `\nOnce we have those, we can pass this to our Business Development team.`;
     return msg;
   }
 
-  return `Internal note — ${name} cleared first-pass vetting (no flags, no open checks).
+  return `Internal note: ${name} cleared first-pass vetting (no flags, no open checks).
 
 Next steps:
 1. Add to Asana BD pipeline, stage: "Intro call"
-2. Pull in the right internal stakeholder(s) — likely swaps/product + legal if private-swap or custody-adjacent features are involved
+2. Pull in the right internal stakeholder(s): likely swaps/product + legal if private-swap or custody-adjacent features are involved
 3. Confirm proposed revenue share / distribution terms in writing before the call
 4. Schedule intro call and bring this vetting summary`;
 }

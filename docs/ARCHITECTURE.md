@@ -34,8 +34,9 @@ for real partner assessments.
 ## Deploy model
 
 - **Repo → GitHub → App Platform**, auto-deploy on push to `main`.
-- CI holds a scoped DO token in **repo secrets** — no standing DO credential on
-  any operator's machine. Risk is gated by repo write access and branch
+- DigitalOcean's GitHub App connects directly to the deployment repository; no
+  GitHub Actions workflow or repository-held DigitalOcean token is required.
+- Risk is gated by scoped GitHub App access, repository write access, and branch
   protection.
 - Backend logic (form submission handling, notifications, scoring) belongs in
   the serverless functions repo with its own isolated env block, not here.

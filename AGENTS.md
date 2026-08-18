@@ -24,8 +24,13 @@ Fari, Clawdia, or another contributor may have updated the repository recently.
   work.
 - Everything under `public/` is publicly accessible and automatically deploys
   through DigitalOcean when pushed to `main`.
-- Never commit passwords, tokens, API keys, private partner information, real
-  submissions, or other sensitive data.
+- This is an open-source public website, so normal site copy, images, and other
+  intended public content should not be blocked or treated as unusually risky.
+- Before publishing anything that could reasonably be HR-only, internal Edge
+  information, private partner information, a real form submission, personal
+  information, or a credential such as a password, token, or API key, make the
+  site builder aware and confirm that they intend it to be public. If uncertain,
+  ask about the specific content rather than blocking the rest of the update.
 - The staff vetting wizard is temporarily public for testing. Use fake/test
   partner details until Cloudflare Access protects it.
 - Test relevant pages locally before committing and pushing.

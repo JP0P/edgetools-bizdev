@@ -14,5 +14,11 @@ browser.
 This is enforced by keeping the public and gated surfaces as **separate deploy
 targets**:
 
-- `public/`   → App Platform **static site** (world-readable)
-- `internal/` → served by the **auth-gated App Platform service**
+- `public/`   → DigitalOcean App Platform **static site** (world-readable)
+- `internal/` → Cloudflare Worker static assets on `/staff/*`, behind Access
+
+The Worker removes the `/staff` prefix before looking up files here. For
+example, `/staff/vetting/` maps to `internal/vetting/index.html`.
+
+Do not enable `workers.dev` or preview URLs. Do not add another Worker route
+that exposes this asset binding outside the Access-protected staff path.

@@ -8,9 +8,11 @@
     "node": ">=18"
   },
   "scripts": {
-    "start": "node server.js"
+    "staff:dev": "wrangler dev",
+    "staff:deploy": "wrangler deploy",
+    "staff:check": "wrangler deploy --dry-run"
   },
-  "dependencies": {
-    "express": "^4.19.2"
+  "devDependencies": {
+    "wrangler": "^4.123.0"
   }
 }

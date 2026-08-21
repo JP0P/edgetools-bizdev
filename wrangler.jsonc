@@ -1,0 +1,23 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "edgetools-bizdev-staff",
+  "main": "worker/index.js",
+  "compatibility_date": "2026-08-18",
+  "workers_dev": false,
+  "preview_urls": false,
+  "routes": [
+    {
+      "pattern": "bizdev.edgetools.app/staff",
+      "zone_name": "edgetools.app"
+    },
+    {
+      "pattern": "bizdev.edgetools.app/staff/*",
+      "zone_name": "edgetools.app"
+    }
+  ],
+  "assets": {
+    "directory": "./internal",
+    "binding": "ASSETS",
+    "run_worker_first": true
+  }
+}

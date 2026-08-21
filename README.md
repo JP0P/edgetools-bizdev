@@ -1,12 +1,13 @@
 # edgetools-bizdev
 
-Umbrella site for Edge BizDev tools.
+Umbrella site for Edge BizDev tools, with one hostname and two isolated deploy
+targets:
 
-- **Public preview:** landing page + partner **intake** placeholder + Fari's
-  draft vetting wizard (`public/`). The wizard is temporarily public for team
-  testing and must move behind Cloudflare Access before real partner use.
-- **Staff-only:** partner **vetting** and other internal tools (`internal/`),
-  served behind a login.
+- **Public:** landing page and partner intake (`public/`), served by
+  DigitalOcean at `bizdev.edgetools.app`.
+- **Staff-only:** partner vetting and other internal tools (`internal/`), served
+  by a Cloudflare Worker at `bizdev.edgetools.app/staff/*` and protected by
+  Cloudflare Access with Google Workspace login.
 
 See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) for the design, trust tiers,
 and deploy model.
@@ -15,16 +16,19 @@ and deploy model.
 
 ```bash
 npm install
-cp .env.example .env   # set STAFF_PASSWORD + SESSION_SECRET
-npm start              # http://localhost:8080
+npx serve public -l 8080  # public site at http://localhost:8080
+npm run staff:dev         # staff Worker at the URL Wrangler prints
 ```
 
-Public pages are open; `/staff/` redirects to `/login` until you sign in.
+Wrangler's local server does not reproduce the Cloudflare Access login screen;
+Access is enforced on the deployed `/staff/*` route.
 
 ## Deploy modes
 
-- **Static site** — `.do/app.static.yaml`. Serves `public/` only: landing and
-  placeholders, no running process and no real login. Internal vetting content
-  must remain outside `public/` until Cloudflare Access is active.
-- **Node service** — `.do/app.service.yaml`. Serves both surfaces and enables
-  the gated `/staff` area.
+- **DigitalOcean static site** — `.do/app.static.yaml` deploys `public/` only.
+- **Cloudflare Worker** — `wrangler.jsonc` deploys `internal/` only, rewrites
+  `/staff/*` to the matching private asset, and disables `workers.dev` and
+  preview URLs.
+
+Run `npm run staff:check` before deploying the Worker. Never move staff assets
+into `public/`; the DigitalOcean origin is intentionally public.

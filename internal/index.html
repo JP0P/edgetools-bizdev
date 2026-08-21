@@ -4,31 +4,30 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="robots" content="noindex" />
-  <title>Staff · Edge BizDev</title>
+  <title>Staff Access · Edge BizDev</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/styles.css" />
 </head>
 <body>
   <main class="shell">
     <header class="brand">
-      <a href="/" style="text-decoration:none;color:inherit;display:flex;align-items:center;gap:10px;">
-        <span class="mark">◆</span>
-        <span class="wordmark">Edge <b>BizDev</b></span>
-      </a>
+      <a href="/"><span class="mark" aria-hidden="true">◆</span><span>Edge <strong>BizDev</strong></span></a>
     </header>
 
-    <section class="hero">
-      <h1>Staff tools</h1>
-      <p class="lede">Internal BizDev tools. You're signed in.</p>
-
-      <div class="cta-row" style="margin-top:28px;">
-        <a class="btn btn-ghost" href="/logout">Sign out</a>
+    <section class="card compact-card">
+      <p class="eyebrow">Staff workspace</p>
+      <h1>Partner vetting</h1>
+      <p class="lede">Review prospective partners with Edge’s first-pass questionnaire and recommendation flow.</p>
+      <div class="status"><span aria-hidden="true">●</span> Edge staff access</div>
+      <div class="actions">
+        <a class="btn btn-primary" href="/staff/vetting/">Open vetting questionnaire →</a>
+        <a class="btn btn-secondary" href="/">← Back home</a>
       </div>
     </section>
 
-    <footer class="foot">
-      <span>Restricted — Edge staff only.</span>
-      <span class="muted">Staff session.</span>
-    </footer>
+    <footer class="foot"><span>Edge · self-custody and freedom tech</span><span>Restricted staff tools</span></footer>
   </main>
 </body>
 </html>

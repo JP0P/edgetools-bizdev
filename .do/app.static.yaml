@@ -1,7 +1,7 @@
 # DigitalOcean App Platform spec — static-site deploy.
 #
-# Deploys only the public/ surface: landing and intake. No running process, and
-# no login. Use app.service.yaml instead when the gated /staff area is needed.
+# Deploys only the public/ surface: landing and intake. The `/staff/*` route is
+# served separately by the Cloudflare Worker configured in wrangler.jsonc.
 #
 # Console setup: App Platform → Create App → GitHub → JP0P/edgetools-bizdev,
 # then choose resource type "Static Site", source dir "/public".

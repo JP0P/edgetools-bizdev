@@ -31,6 +31,6 @@ Fari, Clawdia, or another contributor may have updated the repository recently.
   information, or a credential such as a password, token, or API key, make the
   site builder aware and confirm that they intend it to be public. If uncertain,
   ask about the specific content rather than blocking the rest of the update.
-- The staff vetting wizard is temporarily public for testing. Use fake/test
-  partner details until Cloudflare Access protects it.
+- Staff assets live only in `internal/` and deploy through the Cloudflare Worker
+  route. Never copy them into `public/`, including for previews or testing.
 - Test relevant pages locally before committing and pushing.

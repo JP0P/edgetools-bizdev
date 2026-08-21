@@ -1,55 +1,59 @@
 # edgetools-bizdev — architecture
 
-An umbrella site for Edge BizDev tools, covering **partner intake** and
-**partner vetting**. Two ends of one pipeline: an outside partner rep applies
-(intake) → our team reviews them (vetting).
+One BizDev site with two trust tiers on the same hostname. Outside partners use
+the public intake surface; Edge staff use the private vetting surface.
 
-## Surfaces & trust tiers
+## Surfaces and trust tiers
 
-One small Node service (`server.js`) serves both surfaces:
-
-| Surface | Routes | Who | Auth |
+| Surface | Routes | Source | Authentication |
 |---|---|---|---|
-| Public | `/`, `/intake/*`, `/styles.css` (`public/`) | Outside partner reps | None |
-| Gated | `/staff/*`, `/internal/*` (`internal/`) | Edge staff only | Login required |
+| Public | `/`, `/intake/*`, `/styles.css` | `public/` | None |
+| Staff | `/staff`, `/staff/*` | `internal/` | Cloudflare Access + Google Workspace |
 
-**Non-negotiable:** internal content is served *from behind* auth, never shipped
-in the public bundle. The service only serves `internal/` after a valid session
-cookie. See `internal/README.md`.
+Internal content is never shipped in the DigitalOcean public bundle.
 
-## Auth
+## Request routing
 
-The gated surface uses a shared staff password (`STAFF_PASSWORD`). The service
-compares it in constant time, issues an HMAC-signed session cookie, and gates
-`/staff` and `/internal`.
+`bizdev.edgetools.app` is a proxied Cloudflare hostname whose normal origin is
+the DigitalOcean static site. Two more-specific Worker Routes intercept only
+`/staff` and `/staff/*`:
 
-The login flow is isolated to the two marked LOGIN blocks in `server.js`, and
-every session goes through a single `issueSession()` helper. The password check
-can therefore be swapped for an identity provider without touching routing,
-cookie handling, or deploy config.
+1. Cloudflare Access checks the `/staff/*` request and permits authenticated
+   `@edge.app` Google Workspace identities.
+2. `worker/index.js` strips the `/staff` prefix.
+3. The Worker fetches the corresponding file from the `internal/` asset binding.
+4. Every other path continues to DigitalOcean unchanged.
 
-A shared password gives no per-person identity. Use it for a staff preview, not
-for real partner assessments.
+For example, `/staff/vetting/` maps to `internal/vetting/index.html`.
+`/staff` redirects to `/staff/` before any private asset is returned.
+
+Both `workers.dev` and Worker preview URLs are disabled. This prevents the
+private asset bundle from acquiring an alternate public hostname. The
+DigitalOcean origin cannot bypass Access because `internal/` is not part of its
+deployment.
 
 ## Deploy model
 
-- **Repo → GitHub → App Platform**, auto-deploy on push to `main`.
-- DigitalOcean's GitHub App connects directly to the deployment repository; no
-  GitHub Actions workflow or repository-held DigitalOcean token is required.
-- Risk is gated by scoped GitHub App access, repository write access, and branch
-  protection.
-- Backend logic (form submission handling, notifications, scoring) belongs in
-  the serverless functions repo with its own isolated env block, not here.
+- **Public:** GitHub `main` → DigitalOcean App Platform static site → `public/`.
+- **Staff:** GitHub `main` → Cloudflare Workers Builds → `wrangler deploy`.
+- **Access:** self-hosted application for `bizdev.edgetools.app/staff/*`, using
+  the reusable Edge Staff policy and Google identity provider.
+
+The provider integrations hold deployment credentials. No Cloudflare,
+DigitalOcean, or Google credential belongs in the repository.
 
 ## Layout
 
-```
-public/            world-readable static site
-  index.html       landing
+```text
+public/            world-readable DigitalOcean static site
+  index.html       landing + Staff Login link
   styles.css       shared styling
-  intake/          partner intake form
-  staff/           public "access coming soon" page; no internal content
-internal/          auth-gated surface — never public
-.do/               App Platform specs
-docs/              this file
+  intake/          public partner intake
+internal/          private Worker asset bundle
+  index.html       staff landing
+  vetting/         partner vetting flow
+worker/            `/staff` prefix rewrite + private response headers
+wrangler.jsonc     Worker assets, routes, and public-URL restrictions
+.do/               public DigitalOcean static-site spec
+docs/              architecture documentation
 ```
